@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
-    'profiles',
+    'counselor',
+    'client',
   
 ]
 
@@ -86,21 +87,24 @@ ROOT_URLCONF = 'core.urls'
 
 JAZZMIN_SETTINGS = {
     "site_title": "DanışmanımAPP",
-    "site_header": "DanışmanımAPP Admin Paneli",
-    "site_logo": "path/to/your/logo.png",  
+    "site_header": "DanışmanımAPP",
     "welcome_sign": "Hoş geldiniz!",
     "search_model": "auth.User",
     "show_sidebar": True,
+    "login_logo": None,
+    "site_brand": "DanışmanımAPP",
     "navigation_expanded": True,
+    "copyright": "DanismanimAPP Ltd",
 }
 
 JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",  
     "navbar_small_text": False,
-    "body_small_text": False,
-    "brand_small_text": False,
+    "body_small_text": True,
+    "brand_small_text": True,
     "brand_colour": "navbar-dark",
     "accent": "accent-primary",
-    "navbar": "navbar-light",
+    "navbar": "navbar-ligth",
     "no_navbar_border": False,
     "navbar_fixed": True,
     "layout_boxed": False,
