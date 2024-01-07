@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'counselor',
     'client',
+    'import_export',
   
 ]
 
