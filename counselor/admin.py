@@ -10,6 +10,6 @@ class ConsultantProfileResource(resources.ModelResource):
 
 @admin.register(ConsultantProfile)
 class ConsultantProfileAdmin(ImportExportModelAdmin):
-    list_display = ['user', 'age', 'location', 'education', 'uzmanlik_alani', 'profil_onay_durumu']
+    list_display = ['user', 'name', 'lastname', 'age', 'location', 'education', 'uzmanlik_alani', 'profil_onay_durumu']
     list_filter = ['profil_onay_durumu']
 

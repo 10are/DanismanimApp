@@ -30,6 +30,8 @@ class ConsultantProfile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    lastname = models.CharField(max_length=50, blank=True, null=True)
     age = models.IntegerField(blank=True, null=True)
     location = models.CharField(max_length=50, choices=LOCATION_CHOICES, blank=True, null=True)
     education = models.CharField(max_length=50, choices=EDU_CHOICES, blank=True, null=True)
