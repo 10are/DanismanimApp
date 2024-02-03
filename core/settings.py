@@ -53,8 +53,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
+    'recurrence',
     'counselor',
     'client',
+    'appointments',
+    'ckeditor',
+    'blog',
     'import_export',
   
 ]
@@ -121,6 +125,13 @@ JAZZMIN_UI_TWEAKS = {
     "head_color": None,
 }
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 800,
+    },
+}
 
 TEMPLATES = [
     {
