@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'blog',
     'import_export',
+    'tests',
   
 ]
 
