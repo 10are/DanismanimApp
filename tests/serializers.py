@@ -4,7 +4,7 @@ from .models import Doktor, CalismaGunu, Randevu
 class RandevuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Randevu
-        fields = ['id', 'baslangic_saati', 'bitis_saati']
+        fields = ['id', 'baslangic_saati', 'bitis_saati','doktor', 'calisma_gunu']
 
 class CalismaGunuSerializer(serializers.ModelSerializer):
     randevular = RandevuSerializer(many=True, read_only=True)
