@@ -12,37 +12,45 @@ class Doktor(models.Model):
         return self.adi
 
 class CalismaGunu(models.Model):
-    doktor = models.ForeignKey(Doktor, related_name='calisma_gunleri', on_delete=models.CASCADE)
-    gun = models.DateField()
+    doktor = models.ForeignKey(Doktor, related_name='calisma_gunu_araliklari', on_delete=models.CASCADE)
+    baslangic_tarihi = models.DateField()
+    bitis_tarihi = models.DateField()
     baslangic_saati = models.TimeField()
     bitis_saati = models.TimeField()
     seans_suresi = models.IntegerField(help_text="Dakika cinsinden seans süresi")
     ara_suresi = models.IntegerField(help_text="Dakika cinsinden ara süresi")
 
     def __str__(self):
-        return f"{self.doktor.adi} - {self.gun}"
+        return f"{self.doktor.adi} - {self.baslangic_tarihi} - {self.bitis_tarihi}"
 
     def seans_olustur(self):
-        baslangic = datetime.datetime.combine(self.gun, self.baslangic_saati)
-        bitis = datetime.datetime.combine(self.gun, self.bitis_saati)
-        seans_suresi = datetime.timedelta(minutes=self.seans_suresi)
-        ara_suresi = datetime.timedelta(minutes=self.ara_suresi)
+        gun_sayisi = (self.bitis_tarihi - self.baslangic_tarihi).days + 1
+        for gun in range(gun_sayisi):
+            calisma_gunu = self.baslangic_tarihi + datetime.timedelta(days=gun)
+            baslangic = datetime.datetime.combine(calisma_gunu, self.baslangic_saati)
+            bitis = datetime.datetime.combine(calisma_gunu, self.bitis_saati)
+            seans_suresi = datetime.timedelta(minutes=self.seans_suresi)
+            ara_suresi = datetime.timedelta(minutes=self.ara_suresi)
 
-        while baslangic + seans_suresi <= bitis:
-            Randevu.objects.create(
-                calisma_gunu=self,
-                baslangic_saati=baslangic.time(),
-                bitis_saati=(baslangic + seans_suresi).time()
-            )
-            baslangic += seans_suresi + ara_suresi
+            while baslangic + seans_suresi <= bitis:
+                Randevu.objects.create(
+                    doktor=self.doktor,
+                    calisma_gunu=calisma_gunu,
+                    baslangic_saati=baslangic.time(),
+                    bitis_saati=(baslangic + seans_suresi).time()
+                )
+                baslangic += seans_suresi + ara_suresi
+
 
 class Randevu(models.Model):
-    calisma_gunu = models.ForeignKey(CalismaGunu, related_name='randevular', on_delete=models.CASCADE)
+    doktor = models.ForeignKey(Doktor, related_name='randevular', on_delete=models.CASCADE)
+    calisma_gunu = models.DateField()
     baslangic_saati = models.TimeField()
     bitis_saati = models.TimeField()
 
     def __str__(self):
-        return f"{self.calisma_gunu.doktor.adi} - {self.baslangic_saati} - {self.bitis_saati}"
+        return f"{self.doktor.adi} - {self.calisma_gunu} - {self.baslangic_saati} - {self.bitis_saati}"
+
 
 @receiver(post_save, sender=CalismaGunu)
 def seanslari_olustur(sender, instance, created, **kwargs):
