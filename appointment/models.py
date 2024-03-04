@@ -36,6 +36,7 @@ class CalismaGunu(models.Model):
                 baslangic += seans_suresi + ara_suresi
 
 
+
 class Appointment(models.Model):
     counselor = models.ForeignKey(ConsultantProfile, related_name='appointments', on_delete=models.CASCADE)
     calisma_gunu = models.DateField()
