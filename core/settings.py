@@ -56,12 +56,11 @@ INSTALLED_APPS = [
     'recurrence',
     'counselor',
     'client',
-    'appointments',
     'ckeditor',
     'ckeditor_uploader',
     'blog',
     'import_export',
-    'tests',
+    'appointment',
   
 ]
 
