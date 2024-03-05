@@ -1,15 +1,14 @@
 from django.contrib import admin
-from .models import  CalismaGunu, Appointment
+from .models import  WorkDay, Appointment
 
-class CalismaGunuInline(admin.TabularInline):
-    model = CalismaGunu
+class WorkDayInline(admin.TabularInline):
+    model = WorkDay
     extra = 1
 
-
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('counselor', 'calisma_gunu', 'baslangic_saati', 'bitis_saati')
-    list_filter = ('counselor', 'calisma_gunu')
+    list_display = ('counselor', 'work_day', 'start_time', 'end_time')
+    list_filter = ('counselor', 'work_day')
     search_fields = ('counselor__name', 'counselor__lastname')
 
 admin.site.register(Appointment, AppointmentAdmin)
-admin.site.register(CalismaGunu)
+admin.site.register(WorkDay)

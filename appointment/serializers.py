@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import  CalismaGunu, Appointment
+from .models import WorkDay, Appointment
 from counselor.models import ConsultantProfile
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -10,14 +10,14 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['id', 'baslangic_saati', 'bitis_saati', 'counselor_name',  'calisma_gunu']
+        fields = ['id', 'start_time', 'end_time', 'counselor_name',  'work_day']
 
-class CalismaGunuSerializer(serializers.ModelSerializer):
+class WorkDaySerializer(serializers.ModelSerializer):
     appointments = AppointmentSerializer(many=True, read_only=True)
 
     class Meta:
-        model = CalismaGunu
-        fields = ['id', 'baslangic_saati', 'bitis_saati', 'seans_suresi', 'ara_suresi', 'appointments']
+        model = WorkDay
+        fields = ['id', 'start_time', 'end_time', 'session_duration', 'break_duration', 'appointments']
 
 class CounselorAppointmentSerializer(serializers.ModelSerializer):
     appointments = serializers.SerializerMethodField()
@@ -29,3 +29,4 @@ class CounselorAppointmentSerializer(serializers.ModelSerializer):
     def get_appointments(self, obj):
         appointments = Appointment.objects.filter(counselor=obj)
         return AppointmentSerializer(appointments, many=True).data
+
