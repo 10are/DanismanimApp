@@ -18,17 +18,15 @@ class WorkDay(models.Model):
         return f"{self.counselor.name} - {self.start_date} - {self.end_date}"
 
     def create_sessions(self):
-        if self.start_date > self.end_date:
-            raise ValidationError(_("Start date cannot be after end date."))
+        if self.start_date > self.end_date or (self.start_date == self.end_date and self.start_time >= self.end_time):
+            raise ValidationError(_("Start date and time cannot be after or equal to end date and time."))
 
-        if self.start_time >= self.end_time:
-            raise ValidationError(_("Start time cannot be after or equal to end time."))
 
         days_count = (self.end_date - self.start_date).days + 1
         for day in range(days_count):
             work_day = self.start_date + datetime.timedelta(days=day)
             if work_day > self.end_date:
-                break  # Son tarihden sonra çalışmayı durdur
+                break 
             start_time = datetime.datetime.combine(work_day, self.start_time)
             end_time = datetime.datetime.combine(work_day, self.end_time)
             session_duration = datetime.timedelta(minutes=self.session_duration)
