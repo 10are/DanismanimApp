@@ -14,13 +14,15 @@ class WorkDay(models.Model):
     session_duration = models.IntegerField(help_text="Session duration in minutes")
     break_duration = models.IntegerField(help_text="Break duration in minutes")
 
+    class Meta:
+        unique_together = ('counselor', 'start_date', 'end_date', 'start_time', 'end_time')
+
     def __str__(self):
         return f"{self.counselor.name} - {self.start_date} - {self.end_date}"
 
     def create_sessions(self):
         if self.start_date > self.end_date or (self.start_date == self.end_date and self.start_time >= self.end_time):
             raise ValidationError(_("Start date and time cannot be after or equal to end date and time."))
-
 
         days_count = (self.end_date - self.start_date).days + 1
         for day in range(days_count):
@@ -33,6 +35,15 @@ class WorkDay(models.Model):
             break_duration = datetime.timedelta(minutes=self.break_duration)
 
             while start_time + session_duration <= end_time:
+                existing_appointments = Appointment.objects.filter(
+                    counselor=self.counselor,
+                    work_day=work_day,
+                    start_time=start_time.time(),
+                    end_time=(start_time + session_duration).time()
+                )
+                if existing_appointments.exists():
+                    raise ValidationError(_("Bu saat diliminde zaten bir randevunuz bulunmaktadır. Lütfen başka bir saat dilimi seçin."))
+
                 Appointment.objects.create(
                     counselor=self.counselor,
                     work_day=work_day,
@@ -43,10 +54,17 @@ class WorkDay(models.Model):
 
 
 class Appointment(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Sold', 'Sold'),  
+    ]
+
     counselor = models.ForeignKey(ConsultantProfile, related_name='appointments', on_delete=models.CASCADE)
     work_day = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')  
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  
 
     def __str__(self):
         return f"{self.counselor.name} - {self.work_day} - {self.start_time} - {self.end_time}"

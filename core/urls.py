@@ -25,6 +25,7 @@ urlpatterns = [
     path('counselor/', include('counselor.urls')),  
     path('blog/', include('blog.urls')),
     path('randevu/', include('appointment.urls')),
+    path('transaction/', include('transaction.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
 ]
 

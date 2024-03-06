@@ -36,3 +36,6 @@ class ClientProfile(models.Model):
     location = models.CharField(max_length=50, choices=LOCATION_CHOICES, blank=True, null=True)
     education = models.CharField(max_length=50, choices=EDU_CHOICES, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
