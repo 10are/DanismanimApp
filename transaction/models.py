@@ -13,3 +13,11 @@ class Transaction(models.Model):
     def __str__(self):
         return self.client.user.username
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        self.appointment.status = 'Sold'
+        self.appointment.save()
+
+    
+    
