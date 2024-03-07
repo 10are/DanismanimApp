@@ -13,6 +13,7 @@ class WorkDay(models.Model):
     end_time = models.TimeField()
     session_duration = models.IntegerField(help_text="Session duration in minutes")
     break_duration = models.IntegerField(help_text="Break duration in minutes")
+   
 
     class Meta:
         unique_together = ('counselor', 'start_date', 'end_date', 'start_time', 'end_time')
@@ -28,7 +29,7 @@ class WorkDay(models.Model):
         for day in range(days_count):
             work_day = self.start_date + datetime.timedelta(days=day)
             if work_day > self.end_date:
-                break 
+                break
             start_time = datetime.datetime.combine(work_day, self.start_time)
             end_time = datetime.datetime.combine(work_day, self.end_time)
             session_duration = datetime.timedelta(minutes=self.session_duration)
@@ -51,7 +52,6 @@ class WorkDay(models.Model):
                     end_time=(start_time + session_duration).time()
                 )
                 start_time += session_duration + break_duration
-
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
